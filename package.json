@@ -1,0 +1,14 @@
+{
+  "name": "webwindow",
+  "module": "./src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "webview-bun": "^2.3.0"
+  }
+}

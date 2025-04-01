@@ -1,7 +1,22 @@
 {
-  "name": "webwindow",
+  "name": "@corebyte/webwindow",
+  "description": "Wrapper around tr1ckydev/webview-bun to not freeze the main event loop",
+  "license": "MIT",
+  "version": "1.0.0",
+  "private": false,
   "module": "./src/index.ts",
   "type": "module",
+  "homepage": "https://github.com/CoreBytee/webwindow",
+  "bugs": {
+    "url": "https://github.com/CoreBytee/webwindow/issues"
+  },
+  "author": {
+    "name": "CoreByte",
+    "url": "https://corebyte.me"
+  },
+  "files": [
+    "src"
+  ],
   "devDependencies": {
     "@types/bun": "latest"
   },

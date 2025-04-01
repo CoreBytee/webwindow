@@ -2,7 +2,7 @@
 
 Wrapper around `tr1ckydev/webview-bun` to not freeze the main event loop.
 
-## Installation
+## 📦 Installation
 
 To install `@corebyte/webwindow` using `bun`:
 
@@ -10,7 +10,7 @@ To install `@corebyte/webwindow` using `bun`:
 bun add @corebyte/webwindow
 ```
 
-## Usage
+## 🖥️ Usage
 
 Before creating a window, ensure you call `Window.check()` at the first line of your index file to verify the environment is properly set up:
 
@@ -39,13 +39,13 @@ window.on('close', () => {
 
 > **Note:** Every time you edit a property of the window, the window needs to reload for the changes to take effect.
 
-## Features
+## ✨ Features
 
 - Non-blocking main event loop.
 - Simple API for creating and managing web windows.
 - Built on top of [`tr1ckydev/webview-bun`](https://github.com/tr1ckydev/webview-bun).
 
-## API
+## 📚 API
 
 ### `new Window(options)`
 
@@ -60,7 +60,7 @@ Creates a new web window.
 #### Returns:
 An instance of the web window with event listeners and control methods.
 
-### Properties
+### 🛠️ Properties
 
 - `title` (string): The current title of the window. Can be updated, but the window must reload for changes to take effect.
 - `url` (string): The current URL loaded in the window. Can be updated, but the window must reload for changes to take effect.
@@ -69,7 +69,7 @@ An instance of the web window with event listeners and control methods.
   - `height` (number): The height of the window.
 - `isVisible` (boolean): Indicates whether the window is currently visible.
 
-### Functions
+### ⚙️ Functions
 
 - `show()`: Makes the window visible.
 - `hide()`: Hides the window.
@@ -80,10 +80,10 @@ An instance of the web window with event listeners and control methods.
 - `navigate(url: string)`: Navigates the window to a new URL. Requires a reload to take effect.
 - `on(event: string, callback: Function)`: Registers an event listener for the specified event (e.g., `close`, `resize`).
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request.
 
-## License
+## 📜 License
 
 This project is licensed under the MIT License.

@@ -63,10 +63,11 @@ An instance of the web window with event listeners and control methods.
 
 - `title` (string): The current title of the window. Can be updated, but the window must reload for changes to take effect.
 - `url` (string): The current URL loaded in the window. Can be updated, but the window must reload for changes to take effect.
+- `shown` (boolean): Indicates whether the window is currently visible.
 - `size` (object): The current size of the window, with the following structure:
   - `width` (number): The width of the window.
   - `height` (number): The height of the window.
-- `isVisible` (boolean): Indicates whether the window is currently visible.
+  - `constraint` (SizeConstraint): The size constraint of the window.
 
 ### ⚙️ Functions
 

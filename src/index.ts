@@ -70,9 +70,9 @@ export class Window extends EventEmitter {
         this._title = options.title || "Bun";
         this._url = options.url;
         this._size = fillSizeDefaults(options.size ?? DEFAULT_SIZE, DEFAULT_SIZE);
-        this._shown = options.show ?? true;
+        this._shown = false;
 
-        if (this._shown) this.show();
+        if (options.show ?? true) this.show();
     }
 
     get title() {

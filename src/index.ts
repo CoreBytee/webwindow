@@ -98,7 +98,7 @@ export class Window extends EventEmitter {
     show() {
         if (this._shown) throw new Error("Window already shown");
 
-        this._worker = cluster.fork({
+        const worker = cluster.fork({
             WEBVIEW_DATA: JSON.stringify({
                 title: this._title,
                 url: this._url,
@@ -110,11 +110,13 @@ export class Window extends EventEmitter {
             }),
         });
 
-        this._worker.on("exit", () => {
+        worker.on("exit", () => {
+            if (this._worker !== worker) return;
             this._shown = false;
             this.emit("close");
         })
 
+        this._worker = worker;
         this._shown = true;
     }
 

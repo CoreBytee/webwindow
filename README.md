@@ -23,17 +23,16 @@ Window.check();
 Here's a basic example of how to use `@corebyte/webwindow`:
 
 ```javascript
-import { Window } from '@corebyte/webwindow';
+import { Window } from "@corebyte/webwindow";
 
 const window = new Window({
-  title: 'My Web Window',
-  width: 800,
-  height: 600,
-  url: 'https://example.com',
+  title: "My Web Window",
+  url: "https://example.com",
+  size: { width: 800, height: 600 },
 });
 
-window.on('close', () => {
-  console.log('Window closed');
+window.on("close", () => {
+  console.log("Window closed");
 });
 ```
 

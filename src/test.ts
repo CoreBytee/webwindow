@@ -1,4 +1,4 @@
-import Window from ".";
+import { Window } from ".";
 
 Window.check()
 

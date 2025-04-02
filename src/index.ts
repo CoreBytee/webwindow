@@ -34,7 +34,7 @@ function fillSizeDefaults(size: PartialSize, currentSize: Size): Size {
 
 const DEFAULT_SIZE = { width: 400, height: 400, constraint: SizeHint.NONE }
 
-export default class Window extends EventEmitter {
+export class Window extends EventEmitter {
     /**
      * Checks if this is the worker and if the webview needs to be opened.
      * Must be called at the top of your index file.

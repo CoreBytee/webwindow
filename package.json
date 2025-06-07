@@ -2,9 +2,10 @@
   "name": "@corebyte/webwindow",
   "description": "Wrapper around tr1ckydev/webview-bun to not freeze the main event loop",
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "module": "./src/index.ts",
+  "main": "./src/index.ts",
   "type": "module",
   "homepage": "https://github.com/CoreBytee/webwindow",
   "bugs": {

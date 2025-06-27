@@ -22,9 +22,10 @@
     "@types/bun": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.8.2"
   },
   "dependencies": {
-    "webview-bun": "^2.3.0"
+    "tiny-typed-emitter": "^2.1.0",
+    "webview-bun": "git@github.com:exoRift/webview-bun.git"
   }
 }

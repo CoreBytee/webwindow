@@ -1,7 +1,6 @@
-import { SizeHint, Webview } from "webview-bun";
-import cluster, { type Worker } from "node:cluster";
 import { env } from "bun";
-import EventEmitter from "node:events";
+import { TypedEmitter } from "tiny-typed-emitter";
+import { SizeHint, Webview } from "webview-bun";
 
 export type Size = {
     width: number;
@@ -32,33 +31,31 @@ function fillSizeDefaults(size: PartialSize, currentSize: Size): Size {
     };
 }
 
+function setWebviewSize(webview: Webview, size: Size) {
+    webview.size = {
+        width: size.width,
+        height: size.height,
+        hint: size.constraint
+    };
+}
+
 const DEFAULT_SIZE = { width: 400, height: 400, constraint: SizeHint.NONE }
 
-export class Window extends EventEmitter {
-    /**
-     * Checks if this is the worker and if the webview needs to be opened.
-     * Must be called at the top of your index file.
-     */
-    static check() {
-        if (!env.WEBVIEW_DATA) return;
+interface WindowEvents {
+    close: () => void
+    navigate: (url: string) => void;
+}
 
-        const data = JSON.parse(env.WEBVIEW_DATA);
-        const webview = new Webview();
-        webview.title = data.title;
-        webview.size = data.size;
-
-        webview.navigate(data.url);
-        webview.run();
-        process.exit(0);
-    }
-
+export class Window extends TypedEmitter<WindowEvents> {
+    private _debug: boolean = false;
     private _title: string;
     private _url: string;
     private _size: Size;
     private _shown: boolean;
-    private _worker: Worker | undefined;
+    private _webview: Webview | null = null;
     constructor(
         options: {
+            debug?: boolean;
             title?: string;
             url: string;
             size?: PartialSize;
@@ -67,12 +64,13 @@ export class Window extends EventEmitter {
     ) {
         super()
 
+        this._debug = options.debug ?? false;
         this._title = options.title || "Bun";
         this._url = options.url;
         this._size = fillSizeDefaults(options.size ?? DEFAULT_SIZE, DEFAULT_SIZE);
         this._shown = false;
 
-        if (options.show ?? true) this.show();
+        if (options.show) this.show()
     }
 
     get title() {
@@ -98,25 +96,14 @@ export class Window extends EventEmitter {
     show() {
         if (this._shown) throw new Error("Window already shown");
 
-        const worker = cluster.fork({
-            WEBVIEW_DATA: JSON.stringify({
-                title: this._title,
-                url: this._url,
-                size: {
-                    width: this._size.width,
-                    height: this._size.height,
-                    hint: this._size.constraint,
-                },
-            }),
-        });
+        this._webview = new Webview(this._debug)
+        this._webview.title = this._title;
+        setWebviewSize(this._webview, this._size);
+        this._webview.bind("_webview_navigate", (url: string) => this.emit("navigate", url))
+        this._webview.init("window._webview_navigate(location.href)")
+        this._webview.navigate(this._url);
+        this._webview.runNonBlocking(() => this.emit("close"))
 
-        worker.on("exit", () => {
-            if (this._worker !== worker) return;
-            this._shown = false;
-            this.emit("close");
-        })
-
-        this._worker = worker;
         this._shown = true;
     }
 
@@ -127,7 +114,8 @@ export class Window extends EventEmitter {
     hide() {
         if (!this._shown) throw new Error("Window already hidden");
 
-        this._worker?.kill();
+        this._webview!.destroy()
+        this._webview = null;
         this._shown = false;
     }
 
@@ -142,10 +130,21 @@ export class Window extends EventEmitter {
     /**
      * Reloads the window.
      * If the window is not shown, it will be shown again.
+     * @throws If the webview is not initialized
      */
     reload() {
-        this.close();
-        this.show();
+        if (!this._webview) throw new Error("Webview not initialized");
+        this._webview.eval("window.location.reload()");
+    }
+
+    /**
+     * Evaluates code in the webview.
+     * @param code The code to evaluate in the webview.
+     * @throws If the webview is not initialized
+     */
+    evaluate(code: string) {
+        if (!this._webview) throw new Error("Webview not initialized");
+        this._webview.eval(code);
     }
 
     /**
@@ -155,23 +154,25 @@ export class Window extends EventEmitter {
      */
     setTitle(title: string) {
         this._title = title;
+        if (this._webview) this._webview.title = title;
     }
 
     /**
      * Set the size of the window. 
-     * Only applies after reloading the window.
      * @param size The new size
      */
     setSize(size: PartialSize) {
         this._size = fillSizeDefaults(size, this._size);
+        if (this._webview) setWebviewSize(this._webview, this._size);
     }
 
     /**
      * Set the url of the window. 
-     * Only applies after reloading the window.
      * @param url The new url
      */
     setURL(url: string) {
         this._url = url;
+        if (this._webview)
+            this._webview.navigate(url);
     }
 }

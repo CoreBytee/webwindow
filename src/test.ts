@@ -1,12 +1,13 @@
 import { Window } from ".";
 
-Window.check()
-
 const window = new Window(
     {
         url: "https://example.com",
-        show: false
+        show: true
     }
 )
 
-window.show()
+window.addListener("navigate", (url) => console.log("navigate:", url))
+window.addListener("close", () => console.log("close"))
+
+// window.show()

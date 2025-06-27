@@ -12,31 +12,33 @@ bun add @corebyte/webwindow
 
 ## 🖥️ Usage
 
-Before creating a window, ensure you call `Window.check()` at the first line of your index file to verify the environment is properly set up:
-
-```javascript
-import { Window } from '@corebyte/webwindow';
-
-Window.check(); 
-```
-
 Here's a basic example of how to use `@corebyte/webwindow`:
 
 ```javascript
 import { Window } from "@corebyte/webwindow";
 
 const window = new Window({
-  title: "My Web Window",
-  url: "https://example.com",
-  size: { width: 800, height: 600 },
+  title: "My Web Window", // optional, defaults to "Bun"
+  url: "https://example.com", // required
+  size: { width: 800, height: 600 }, // optional
+  show: true, // optional, show window immediately
+  debug: false // optional, enable debug mode
 });
 
 window.on("close", () => {
   console.log("Window closed");
 });
-```
+window.on("navigate", (url) => {
+  console.log("Navigated to:", url);
+});
 
-> **Note:** Every time you edit a property of the window, the window needs to reload for the changes to take effect.
+// Dynamically update properties
+window.setTitle("New Title");
+window.setSize({ width: 1024, height: 768 });
+window.setURL("https://another-url.com");
+window.reload();
+window.evaluate("alert('Hello from webview!')");
+```
 
 ## ✨ Features
 
@@ -51,34 +53,45 @@ window.on("close", () => {
 Creates a new web window.
 
 #### Options:
-- `title` (string): The title of the window.
-- `url` (string): The URL to load in the window.
-- `size` (PartialSize): The size settings of the window.
-- `show` (boolean): If the window is initially shown.
+- `title` (string, optional): The title of the window. Defaults to "Bun".
+- `url` (string, required): The URL to load in the window.
+- `size` (PartialSize, optional): The size settings of the window.
+- `show` (boolean, optional): If the window is initially shown.
+- `debug` (boolean, optional): Enable debug mode.
 
 #### Returns:
 An instance of the web window with event listeners and control methods.
 
 ### 🛠️ Properties
 
-- `title` (string): The current title of the window. Can be updated, but the window must reload for changes to take effect.
-- `url` (string): The current URL loaded in the window. Can be updated, but the window must reload for changes to take effect.
+- `title` (string): The current title of the window.
+- `url` (string): The current URL loaded in the window.
 - `shown` (boolean): Indicates whether the window is currently visible.
 - `size` (object): The current size of the window, with the following structure:
   - `width` (number): The width of the window.
   - `height` (number): The height of the window.
   - `constraint` (SizeConstraint): The size constraint of the window.
 
-### ⚙️ Functions
+### 📢 Events
 
-- `show()`: Makes the window visible.
-- `hide()`: Hides the window.
-- `reload()`: Reloads the content of the window.
+The `Window` class emits the following events that can be listened to using the `on()` function:
+
+- `close`: Emitted when the window is closed.
+  - Callback signature: `() => void`
+- `navigate`: Emitted when the window navigates to a new URL.
+  - Callback signature: `(url: string) => void`
+
+### ⚙️ Methods
+
+- `show()`: Makes the window visible. Throws if already shown.
+- `hide()`: Hides the window. Throws if already hidden.
+- `reload()`: Reloads the content of the window. Throws if the webview is not initialized.
 - `close()`: Closes the window.
-- `setTitle(title: string)`: Updates the title of the window. Requires a reload to take effect.
-- `setSize(width: number, height: number)`: Updates the size of the window. Requires a reload to take effect.
-- `navigate(url: string)`: Navigates the window to a new URL. Requires a reload to take effect.
-- `on(event: string, callback: Function)`: Registers an event listener for the specified event (e.g., `close`, `resize`).
+- `setTitle(title: string)`: Updates the title of the window. Applies immediately if shown.
+- `setSize(size: PartialSize)`: Updates the size of the window. Applies immediately if shown.
+- `setURL(url: string)`: Navigates the window to a new URL. Applies immediately if shown.
+- `evaluate(code: string)`: Evaluates JavaScript code in the webview. Throws if the webview is not initialized.
+- `on(event: string, callback: Function)`: Registers an event listener for the specified event (`close`, `navigate`).
 
 ## 🤝 Contributing
 

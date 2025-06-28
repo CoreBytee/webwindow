@@ -5,7 +5,7 @@
       "name": "webwindow",
       "dependencies": {
         "tiny-typed-emitter": "^2.1.0",
-        "webview-bun": "git@github.com:exoRift/webview-bun.git",
+        "webview-bun": "exoRift/webview-bun#b805351391e58d0cce4c3b15d92cae192b6b1dda",
       },
       "devDependencies": {
         "@biomejs/biome": "2.0.6",
@@ -47,6 +47,6 @@
 
     "undici-types": ["undici-types@6.20.0", "", {}, "sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg=="],
 
-    "webview-bun": ["webview-bun@git+ssh://git@github.com:exoRift/webview-bun.git#b805351391e58d0cce4c3b15d92cae192b6b1dda", {}, "b805351391e58d0cce4c3b15d92cae192b6b1dda"],
+    "webview-bun": ["webview-bun@github:exoRift/webview-bun#b805351", {}, "exoRift-webview-bun-b805351"],
   }
 }

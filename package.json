@@ -2,7 +2,7 @@
 	"name": "@corebyte/webwindow",
 	"description": "Wrapper around tr1ckydev/webview-bun to not freeze the main event loop",
 	"license": "MIT",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"private": false,
 	"module": "./src/index.ts",
 	"main": "./src/index.ts",
@@ -27,6 +27,6 @@
 	},
 	"dependencies": {
 		"tiny-typed-emitter": "^2.1.0",
-		"webview-bun": "git@github.com:exoRift/webview-bun.git"
+		"webview-bun": "exoRift/webview-bun#b805351391e58d0cce4c3b15d92cae192b6b1dda"
 	}
 }
